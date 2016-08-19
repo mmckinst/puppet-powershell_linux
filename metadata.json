@@ -1,0 +1,37 @@
+{
+  "name": "mmckinst-powershell_linux",
+  "version": "0.1.0",
+  "author": "Mark McKinstry",
+  "summary": "Install PowerShell on Linux",
+  "license": "Apache-2.0",
+  "source": "https://github.com/mmckinst/puppet-powershell_linux",
+  "project_page": "https://github.com/mmckinst/puppet-powershell_linux",
+  "issues_url": "https://github.com/mmckinst/puppet-powershell_linux/issues",
+  "tags": [],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.2.0 < 5.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 3.2.0 < 5.0.0"
+    }
+  ]
+}
