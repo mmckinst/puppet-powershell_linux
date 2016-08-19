@@ -1,6 +1,6 @@
 ---
 language: ruby
-bundler_args: --without development system_tests
+bundler_args: --without development
 before_install:
   - bundle -v
   - rm Gemfile.lock || true
@@ -8,19 +8,24 @@ before_install:
   - gem update bundler
   - gem --version
   - bundle -v
+services:
+  - docker
 matrix:
+  fast_finish: true
   include:
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_INSTALL_TYPE=agent BEAKER_set=docker/centos-7
     script: bundle exec rake acceptance
+    services: docker
+    sudo: required
 
   # these test the latest versions of puppet in the 3.x and 4.x. if you forget
   # to update your testing matrix when new versions of puppet are released,
   # you'll at least always test on the latest version of puppet 3.x and 4.x
   # availalbe
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 3.0"   STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.0"   STRICT_VARIABLES=yes
 
   - rvm: 1.9.3
@@ -29,28 +34,35 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.3.0"
   - rvm: 1.9.3
     env: PUPPET_GEM_VERSION="~> 3.4.0"
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 3.5.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.0.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.1.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.2.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.3.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.4.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.5.0" STRICT_VARIABLES=yes
-  - rvm: 2.1.0
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.6.0" STRICT_VARIABLES=yes
 script: "bundle exec rake validate && bundle exec rake lint && bundle exec rake spec SPEC_OPTS='--format documentation'"
 notifications:
   email: false
+deploy:
+  provider: puppetforge
+  user: mmckinst
+  password:
+    secure: "B3uZpgWSylmGN7oVM3l5JK00h3Rg1tR02oQ6OLHy81LES0/S8ruJlDc+ZXi5KLjQhujXJFbg90KyvZOcNpxkmHeVfaC12kiC0eGJ3YrNxiAyNCvnfmt3hWXeTxJflCA7k5DKYL8Fc/6p2Km4Ax3IvoMofZZH9J0C4JqNREQ2DIfqJr0zHyZu7vuo6PHZm/yUob8I8pLRgmbUZ45XFpnSrsPZTrUri4c2XtBJMx7gjiVF4YKwLGuZn0o3Pe5fSQw2aD9VjYYM2on38LHgAEQWMDRaKCAhSWICQ837vGIGyqM3Xywof+gaRJ73XwXIqedk8zcsUfZQ8vwLng+e87l4PPZhHpFAsSYMoNer7dVpH3Gammju1SMLbRLKHM9xDg831oMj55m+YtY8b/qXCVVzSH+h6/gcGCiQ6q3Kimvu4/xJW1TkO7xF+DdWnypGBRWP/YS4ryXZRFtrHvEr70c3nEoocbp0Pfs5DfCmlV5YdCT0nK6wS8z4BXmGqmrcmlgh5tj9BNL4E8OJKCSCO/iWk0feyP04Kf5Krxza2DNFC1CZM/k3ZVpzvmJYvhSvLzBF1z2bH62OftsMfcfLaYVehDFt4OZa0jjODOIOVAD/+wz+6J3EWhik0QCnWdSvpvYnFoqjqJkJpl3M0U9pxlSA0AYfAU/jVa1ZXaQ8thLVuNs="
+  on:
+    tags: true
